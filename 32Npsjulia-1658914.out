@@ -1,0 +1,200 @@
+=======================
+Loading Julia Module...
+=======================
+
+============================== ENVIRONMENT VARIABLES ===============================
+SLURM_CHECKPOINT_IMAGE_DIR=/var/slurm/checkpoint
+SLURM_NODELIST=dy02
+SLURM_JOB_NAME=32Npsjulia
+MANPATH=/kuacc/apps/julia/1.3.1/share/man:/usr/share/man:/usr/local/share/man
+XDG_SESSION_ID=64619
+SLURMD_NODENAME=dy02
+SLURM_TOPOLOGY_ADDR=dy02
+SLURM_NTASKS_PER_NODE=4
+HOSTNAME=dy02
+SLURM_PRIO_PROCESS=0
+SLURM_NODE_ALIASES=(null)
+SHELL=/bin/bash
+TERM=xterm
+SLURM_JOB_QOS=users
+HISTSIZE=1000
+TMPDIR=/tmp
+SLURM_TOPOLOGY_ADDR_PATTERN=node
+SSH_CLIENT=172.24.5.60 60561 22
+LIBRARY_PATH=/usr/local/cuda-10.1/lib64:/usr/local/cuda-10.1/lib:/kuacc/apps/julia/1.3.1/lib
+QTDIR=/usr/lib64/qt-3.3
+SLURM_JOB_GPUS=3
+QTINC=/usr/lib64/qt-3.3/include
+SSH_TTY=/dev/pts/45
+SLURM_MEM_PER_CPU=12500
+QT_GRAPHICSSYSTEM_CHECKED=1
+SLURM_NNODES=1
+USER=merveoral17
+CUDA_HOME=/usr/local/cuda-10.1
+LS_COLORS=rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=01;36:*.au=01;36:*.flac=01;36:*.mid=01;36:*.midi=01;36:*.mka=01;36:*.mp3=01;36:*.mpc=01;36:*.ogg=01;36:*.ra=01;36:*.wav=01;36:*.axa=01;36:*.oga=01;36:*.spx=01;36:*.xspf=01;36:
+LD_LIBRARY_PATH=/kuacc/apps/cudnn/v7.0.6_CUDA_10.1/lib64:/usr/local/cuda-10.1/lib64:/usr/local/cuda-10.1/lib:/kuacc/apps/julia/1.3.1/lib
+SLURM_JOBID=1658914
+CPATH=/kuacc/apps/cudnn/v7.0.6_CUDA_10.1/include:/usr/local/cuda-10.1/include:/kuacc/apps/julia/1.3.1/include
+SLURM_NTASKS=1
+SLURM_TASKS_PER_NODE=1
+PATH=/usr/local/cuda-10.1/bin:/kuacc/apps/julia/1.3.1/bin:/kuacc/apps/julia/1.3.1:/usr/lib64/qt-3.3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/kuacc/apps/scripts:/kuacc/users/merveoral17/.local/bin:/kuacc/users/merveoral17/bin
+MAIL=/var/spool/mail/merveoral17
+SLURM_JOB_ID=1658914
+SLURM_JOB_USER=merveoral17
+PWD=/scratch/users/merveoral17/workfolder/DL/ProjectCodes/Tests
+CUDA_VISIBLE_DEVICES=0
+_LMFILES_=/kuacc/etc/mod/julia/1.3.1:/kuacc/etc/mod/cuda/10.1:/kuacc/etc/mod/cudnn/7.0.6/cuda-10.1
+LANG=en_US.UTF-8
+MODULEPATH=/kuacc/etc/mod
+SLURM_JOB_UID=583957
+KDEDIRS=/usr
+LOADEDMODULES=julia/1.3.1:cuda/10.1:cudnn/7.0.6/cuda-10.1
+SLURM_NODEID=0
+SLURM_SUBMIT_DIR=/scratch/users/merveoral17/workfolder/DL/ProjectCodes/Tests
+SLURM_TASK_PID=38518
+SLURM_NPROCS=1
+SLURM_CPUS_ON_NODE=4
+SLURM_PROCID=0
+ENVIRONMENT=BATCH
+KRB5CCNAME=KEYRING:persistent:583957
+HISTCONTROL=ignoredups
+SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
+SLURM_JOB_NODELIST=dy02
+HOME=/kuacc/users/merveoral17
+SHLVL=2
+SLURM_LOCALID=0
+SLURM_JOB_GID=200513
+SLURM_JOB_CPUS_PER_NODE=4
+SLURM_CLUSTER_NAME=kuacc
+SLURM_GTIDS=0
+SLURM_SUBMIT_HOST=login02.kuacc.ku.edu.tr
+SLURM_JOB_PARTITION=mid
+LOGNAME=merveoral17
+QTLIB=/usr/lib64/qt-3.3/lib
+GPU_DEVICE_ORDINAL=0
+SLURM_JOB_ACCOUNT=users
+SSH_CONNECTION=172.24.5.60 60561 172.20.238.2 22
+SLURM_JOB_NUM_NODES=1
+MODULESHOME=/usr/share/Modules
+LESSOPEN=||/usr/bin/lesspipe.sh %s
+DISPLAY=localhost:17.0
+XDG_RUNTIME_DIR=/run/user/583957
+QT_PLUGIN_PATH=/usr/lib64/kde4/plugins:/usr/lib/kde4/plugins
+BASH_FUNC_module()=() {  eval `/usr/bin/modulecmd bash $*`
+}
+_=/usr/bin/env
+====================================================================================
+
+
+Setting stack size to unlimited...
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 2062727
+max locked memory       (kbytes, -l) unlimited
+max memory size         (kbytes, -m) 51200000
+open files                      (-n) 51200
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) unlimited
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 4096
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+
+Running JULIA command...
+===========================
+[ Info: Loading MNIST...
+true
+initializing the network
+network defined
+deep_network created
+NpS: [32]
+Strides: [2]
+Distances: [4]
+Lateral Distances: [0]
+gamma : 0
+tanh_factor : 1
+DONE
+1000
+2000
+3000
+4000
+5000
+6000
+7000
+8000
+9000
+10000
+11000
+12000
+13000
+14000
+15000
+16000
+17000
+18000
+19000
+20000
+21000
+22000
+23000
+24000
+25000
+26000
+27000
+28000
+29000
+30000
+31000
+32000
+33000
+34000
+35000
+36000
+37000
+38000
+39000
+40000
+41000
+42000
+43000
+44000
+45000
+46000
+47000
+48000
+49000
+50000
+51000
+52000
+53000
+54000
+55000
+56000
+57000
+58000
+59000
+60000
+1000
+2000
+3000
+4000
+5000
+6000
+7000
+8000
+9000
+10000
+train_score
+1.0
+train_error
+0.0
+test_score
+0.9821
+test_error
+0.017900000000000027
+
+RTC exited with return code: 0
