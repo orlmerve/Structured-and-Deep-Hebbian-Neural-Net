@@ -16,6 +16,7 @@ mutable struct network_weights
 end
     
 
+# defining struct constants for W matrix
 function create_h_distances(n::network_weights)
     distances = zeros(n.output_dim^2, n.input_dim, n.input_dim)
     dict_input_2_position = Dict()
@@ -23,7 +24,6 @@ function create_h_distances(n::network_weights)
         for column_index in 1:n.input_dim
             input_index = row_index*n.input_dim + column_index
             dict_input_2_position[row_index, column_index] = input_index
-    
         end
     end
     centers = []
@@ -51,6 +51,7 @@ function create_h_distances(n::network_weights)
     return distances
 end
 
+# defining structure constants for L matrix
 function create_ah_distances(n::network_weights)
     centers = []
     dict_output_2_position = Dict()
@@ -78,19 +79,21 @@ function create_ah_distances(n::network_weights)
     return distances_ah
 end    
 
+# Create lateral connections
 function create_L(n::network_weights)
     mat = create_ah_distances(n)
     L_mat = repeat(mat,n.NpS,n.NpS) ## !! Figure this one out
     return L_mat
 end
 
+# Create feedforward connections 
 function create_W(n::network_weights)
     mat = create_h_distances(n)
     W_mat = repeat(mat,n.NpS,n.previous_NpS) ## !! Figure this one out
     return W_mat
 end
     
-    
+# Create weights matrices    
 function create_weights_matrix(n::network_weights)
     n.W_structure = create_W(n)
     n.L_structure = create_L(n)
@@ -99,58 +102,58 @@ function create_weights_matrix(n::network_weights)
     n.L = n.L_structure.*Matrix{Float64}(I,n.NpS * n.output_dim^2,n.NpS * n.output_dim^2)
 end
 
+# Activation function
 function activation_function(vec)
     tanh.(vec)
 end
 
+#Check GPU availability
 println(gpu()>=0)
 if gpu() >= 0  # gpu() returns a device id >= 0 if there is a GPU, -1 otherwise 
     atype = KnetArray{Float32}  # KnetArrays are stored and operated in the GPU
 end
-
+# Converts arrays to Knet arrays to work on GPU
 function convert_to_GPU(vec)
     vec=convert(atype,vec)
 end
 
+# Network object
 mutable struct deep_network_GPU
-    image_dim;
-    channels;
-    NpSs;
-    strides;
-    distances;
-    lateral_distances;
-    layers;
-    gamma;
-    lr;
-    lr_floor;
-    current_lr;
-    decay;
-    conversion_tickers;
-    costs; 
-    epoch;
-    structure;
-    deep_matrix_weights;
-    deep_matrix_structure;
-    deep_matrix_identity;
-    weights_adjustment_matrix;
-    weights_update_matrix;
-    grad_matrix;
-    n_images;
-    dict_weights;
-    dimensions; 
-    g_vec;
-    mult_vec;
-    euler_step;
-    tanh_factors;
-    mult_factors;
-    W_gpu;
+    image_dim;                  # input image dimensions
+    channels;                   # number of channels
+    NpSs;                       # number of neurons per site
+    strides;                    # stride array
+    distances;                  # feedforward connections distance threshold
+    lateral_distances;          # lateral connections distance threshold
+    layers;                     # number of layers
+    gamma;                      # feedback connections parameter
+    lr;                         # learning rate
+    lr_floor;                   # min learning rate
+    current_lr;                 # current learning rate
+    decay;                      # decay parameter of learning rate
+    conversion_tickers;         # checks if neural dynamics converged
+    epoch;                      # epoch counter
+    structure;          
+    deep_matrix_weights;        # Weights matrix
+    deep_matrix_structure;      # Structure matrix
+    deep_matrix_identity;       # 
+    weights_adjustment_matrix;  #
+    weights_update_matrix;      #
+    n_images;                   #
+    dict_weights;               #
+    dimensions;                 #
+    euler_step;                 #
+    tanh_factors;               #
+    mult_factors;               #
+    W_gpu;                      #
 end
 
-
+# Convert and floor to integer
 function int(x)
 convert(Int,floor(x))
 end
 
+# Create deep network
 function create_deep_network(dn::deep_network_GPU)
     for i in 1:dn.layers+1
         if i==1
@@ -294,18 +297,17 @@ function neural_dynamics(dn::deep_network_GPU,img)
     return r_vec, conversion_ticker
 end
 
-
+# Update weights via stochastic gradient ascent-descent
 function update_weights(dn::deep_network_GPU,r_vec)
      dn.current_lr = max(dn.lr/(1+dn.decay*dn.epoch), dn.lr_floor)
-     #r_vec = cp.asnumpy(r_vec)
      update_matrix = r_vec*r_vec' #update for L matrix
      grad_weights = convert_to_GPU(dn.weights_update_matrix).*(update_matrix - convert_to_GPU(dn.weights_adjustment_matrix.*dn.deep_matrix_weights))
      dn.deep_matrix_weights += dn.current_lr*grad_weights
 end
 
+# training function to call neural dynamics and gradient ascent-descent 
 function training(dn::deep_network_GPU, images)
      dn.n_images = size(images,1)
-         #epoch_start = time.time()
          sum_ticker = 0
          for img in 1:size(images,1)
              r, conversion_ticker = neural_dynamics(dn,images[img,:])
@@ -313,15 +315,18 @@ function training(dn::deep_network_GPU, images)
              update_weights(dn,r)
          end
          dn.epoch+=1
-         #epoch_end = time.time()
-         #epoch_time = epoch_end-epoch_start
          push!(dn.conversion_tickers,sum_ticker/dn.n_images)
+         
+         # Commented these out for speed
+    
          #println("")
          #println("Epoch: "*string(dn.epoch))
          #println("Conversion: "*string(dn.conversion_tickers[end]))
          #println("Current Learning Rate: "*string(dn.current_lr)) 
          #println("")
  end        
+
+# import mnist and preprocess
 
 function get_mnist()
     
@@ -340,30 +345,25 @@ end
 
 include(Knet.dir("data","mnist.jl"))  # Load data
 x_train, x_test, y_train, y_test = get_mnist()
-file="Trained_network.jld2"
 
-tanh_factors=1
-stride=[2]
-distance_parameter=[4]
-gamma_factor=0
-mult_factor=1
+#file="Trained_network.jld2"
+
+# network parameters
 NpSs=[4]
-lateral_distance = repeat([0],length(distance_parameter))
 image_dim = 28
 channels = 1
-strides = stride
-distances = distance_parameter
-distances_lateral = lateral_distance
-tanh_factors = tanh_factors
+strides = [2]
+distances = [4]
+tanh_factors = 1 
 layers = length(distance_parameter)
-gamma = gamma_factor
-mult_factors = mult_factor
+distances_lateral =  repeat([0],layers)
+gamma = 0
+mult_factors = 1
 
 lr=5e-3;
 lr_floor = 1e-4;
 decay=0.5
 conversion_tickers = []
-costs = []
 epoch =0
 structure =[]
 deep_matrix_weights= [];
@@ -375,8 +375,6 @@ grad_matrix =[];
 n_images =[];
 dict_weights = Dict()
 dimensions = [];
-g_vec=[];
-mult_vec=[];
 euler_step=0.2;
 tanh_factors=1;
 mult_factors=1;
@@ -385,10 +383,10 @@ W_gpu=[];
 println("initializing the network")
 #if (print("Train from scratch? (~77s) "); readline()[1]=='y')
     network= deep_network_GPU(image_dim,channels,NpSs,strides,distances,lateral_distance, layers,gamma, lr,lr_floor,
-                            lr, decay,conversion_tickers, costs, epoch, structure, deep_matrix_weights,
+                            lr, decay,conversion_tickers, epoch, structure, deep_matrix_weights,
                             deep_matrix_structure, deep_matrix_identity, weights_adjustment_matrix,
-                            weights_update_matrix, grad_matrix, n_images, dict_weights, dimensions, g_vec,
-                            mult_vec, euler_step, tanh_factors,mult_factors , W_gpu);
+                            weights_update_matrix, grad_matrix, n_images, dict_weights, dimensions,
+                            euler_step, tanh_factors,mult_factors , W_gpu);
     
     println("network defined")
 
@@ -417,43 +415,44 @@ println("initializing the network")
 
 println("DONE")
 
+# learn representations for tranining data
 train_representations=[]
 #for i in  1:int(size(x_train,1))
 N_m=60000
 for i in 1:N_m
     train_rep, _ = neural_dynamics(network,x_train[i,:])
      push!(train_representations, train_rep)
-     #if (i+1)%1000==0
-     #    println(i+1)
-     #end
  end
 
+# clear train data from memory
 x_train=nothing
 Knet.gc()
 
+# this conversion is needed for ScikitLearn
 for i in 1:length(train_representations)
     train_representations[i]=convert(Array{Float64,1},train_representations[i])
 end
 train_representations=hcat(train_representations...)'
 
-
+# learn representations for test data
 test_representations = []
 for i in 1:size(x_test,1)
 #for i in 1:N_m
       test_rep, _ = neural_dynamics(network, x_test[i,:])
       push!(test_representations,test_rep)
-      #if (i+1)%1000==0
-      #    println(i+1)
-      #end
   end
 
+# clear test data from memory
 x_test=nothing
 Knet.gc()
 
+# import Scikit Learn
 using ScikitLearn
 @sk_import svm: SVC
 
 classifier = SVC(max_iter=1e6, class_weight="balanced",tol=1e-5,random_state=0,kernel="linear")
+
+# fit linear SVM to learned train representations
 
 #fit!(classifier, train_representations, y_train)
 fit!(classifier, train_representations[:,end-network.dimensions[end]+1:end], y_train[1:N_m])
@@ -471,7 +470,9 @@ end
 
 test_representations=hcat(test_representations...)'
 
+# classify the test representations on the trained linear SVM classifier
 test_score=score(classifier,test_representations[:,end-network.dimensions[end]+1:end], y_test)
+
 #test_score=score(classifier,test_representations, y_test[1:N_m])
 println("test_score")
 println(test_score)
@@ -479,6 +480,7 @@ println(test_score)
 println("test_error")
 println(1-test_score)
 
+# print number of data points used to train
 println("")
-println("N_m")
+println("How many representations are used to train the network")
 println(N_m)
